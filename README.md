@@ -42,7 +42,7 @@ zend-stratigility学习笔记
 
 中间件代码是在request 与 response之间处理,接受请求,用户进行自定义处理,然后返回相应的输出或者传递到下一个中间件
 
-(基本使用)[https://github.com/ericivan/zend-stratigility-note/blob/master/baseMiddleware/index.php]
+[基本使用代码](https://github.com/ericivan/zend-stratigility-note/blob/master/baseMiddleware/index.php)
 
 ```php 
 
