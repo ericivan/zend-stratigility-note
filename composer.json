@@ -1,0 +1,11 @@
+{
+    "require": {
+        "zendframework/zend-diactoros": "^1.7",
+        "zendframework/zend-stratigility": "^3.0"
+    },
+    "autoload":{
+        "psr-4":{
+            "Shirly\\":"src/"
+        }
+    }
+}
