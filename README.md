@@ -42,12 +42,11 @@ zend-stratigility学习笔记
 
 中间件代码是在request 与 response之间处理,接受请求,用户进行自定义处理,然后返回相应的输出或者传递到下一个中间件
 
+(基本使用)[https://github.com/ericivan/zend-stratigility-note/blob/master/baseMiddleware/index.php]
+
 ```php 
 
-<?php
-
 require './vendor/autoload.php';
-
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -91,10 +90,10 @@ $sever->listen(function ($req, $res) {
     return $res;
 });
 ```
+
 上面代码有两个中间件,第一个是登录页,监听根路由,如果路由不是 / 或者空开始,就传递到 handle 处理,反之直接返回 Hello World
 
 第二个路由匹配 /foo,匹配的是 /foo ,/foo/, /foo/anything 的路由地址
 
 最后一个是没有任何路由匹配的处理,会返回一个404的状态
-
 
