@@ -201,6 +201,88 @@ $errorHandler->attachListener(function ($throwable, $request, $response) use ($l
 ```
 
 
+### 创建中间件
+
+> 例子在这里，中间件必须实现 PSR-15 middleware interface
+
+[中间件](https://github.com/ericivan/zend-stratigility-note/blob/master/src/TalkMiddleware.php)
+
+#### 匿名中间件
+
+```php
+    $pipeline->pipe(new class implements MiddlewareInterface {
+        public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+        {
+            $response = $handler->handle($request);
+            return $response->withHeader('X-Clacks-Overhead', 'GNU Terry Pratchett');
+        }
+    });
+```
+
+#### Callable Middleware
+
+有时候我们不想实现 MiddlewareInterface,特别当我们在调试程序的时候，这种情况下，我们可以像实现process方法一样
+用 Zend\Stratigility\Middleware\CallableMiddlewareDecorator 把它写在外层
+
+```php
+    
+   $pipeline->pipe(new CallableMiddlewareDecorator(function ($req, $handler) {
+       // do some work
+       $response = $handler->($req);
+       // do some work
+       return $response;
+   });
+
+```
+
+> $req 为 ServerRequestInterface，$handler 为 RequestHandlerInterface
+
+上文提到的middleware()方法也能实现
+
+
+#### Double-pass Middleware(双通道中间件)
+
+这是一个psr15之前的概念
+
+```php
+function (
+    ServerRequestInterface $request,
+    ResponseInterface $response,
+    callable $next
+) : ResponseInterface
+```
+
+$next 参数格式如下
+
+```php
+function (
+    ServerRequestInterface $request,
+    ResponseInterface $response
+) : ResponseInterface
+```
+
+中间键处理过程这个把第一次的两个参数都传递到下一层，response参数通常用来返回一个原形响应
+
+> Zend\Stratigility\Middleware\DoublePassMiddlewareDecorator 允许psr-15中间件接口实现的是偶装饰
+双通道中间件，当使用 DoublePassMiddlewareDecorator时，handler 会被转化成 callable
+
+使用的时候，我们把中间件作为构造函数的参数传递过去
+
+```php
+    $pipeline->pipe(new DoublePassMiddlewareDecorator($middleware));
+```
+辅助函数 doublePassMiddleware() 可以达到一样的效果
+
+> 最后还是建议，不要把psr-15和双通道中间件混合使用
+
+
+
+
+
+
+
+
+
 
 
 
