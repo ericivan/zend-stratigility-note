@@ -25,6 +25,8 @@ $app->pipe(middleware(function (ServerRequestInterface $req, RequestHandlerInter
     return $response;
 }));
 
+$app->pipe(path('/custom', new \Shirly\TalkMiddleware(new Response())));
+
 $app->pipe(path('/foo',middleware(function ($req, $handle) {
     $response = new Response();
     $response->getBody()->write('FOO!');
